@@ -1,0 +1,6 @@
+dist/*
+build/*
+__pycache__/*
+debug.log
+*.xlsx
+*.spec

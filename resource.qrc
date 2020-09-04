@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="16x16">
+    <file>icons/16x16/cil-chart-line.png</file>
+    <file>icons/16x16/cil-size-grip.png</file>
+  </qresource>
+</RCC>

@@ -5,8 +5,8 @@ if hasattr(sys, 'frozen'):
 from ui_main import Ui_MainWindow
 from ui_splashScreen import Ui_SplashScreen
 from PyQt5 import QtWidgets, QtCore
-from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtCore import QTimer, QEvent, Qt
+from PyQt5.QtWidgets import *
 
 from app_modules import *
 
@@ -20,9 +20,24 @@ class AppWindow(QMainWindow):
         self.ui.setupUi(self)
         self.setWindowFlag(QtCore.Qt.FramelessWindowHint)
         self.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-        
+
+        def moveWindow(event):
+            if UIFunctions.returnStatus(self) == 1:
+                UIFunctions.maximize_restore(self)
+            if event.buttons() == Qt.LeftButton:
+                self.move(self.pos() + event.globalPos() - self.dragPos)
+                self.dragPos = event.globalPos()
+                event.accept()
+
+        self.ui.frame_titleBar_title.mouseMoveEvent = moveWindow
         UIFunctions.uiDefinitions(self)
-        
+    
+    # EVENT
+    def mousePressEvent(self, event):
+        self.dragPos = event.globalPos()
+
+    def resizeEvent(self, event):
+        return super(AppWindow, self).resizeEvent(event)
 
 class SplashWindow(QMainWindow):
     def __init__(self):
@@ -47,7 +62,6 @@ class SplashWindow(QMainWindow):
             self.main.show()
             self.close()
         counter += 10 # TODO debugging
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
